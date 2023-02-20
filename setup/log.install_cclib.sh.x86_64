@@ -1,0 +1,6 @@
++ CCLIBVERSION=1.5.post1
++ NAME=CCLIB-1.5.post1
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_CCLIB-1.5.post1_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

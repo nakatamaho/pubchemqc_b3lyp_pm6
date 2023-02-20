@@ -1,0 +1,453 @@
+diff -ur gamess.org/comp gamess/comp
+--- gamess.org/comp	2018-02-15 12:10:06.000000000 +0900
++++ gamess/comp	2018-03-22 14:14:32.000000000 +0900
+@@ -130,6 +130,7 @@
+ if ($TARGET == win32)      set OK=true
+ if ($TARGET == win64)      set OK=true
+ if ($TARGET == winazure)   set OK=true
++if ($TARGET == xtcos)      set OK=true
+ if ($OK == false) then
+    echo The comp script does not select a correct TARGET machine type.
+    echo What you typed when editing this script was $TARGET
+@@ -165,6 +166,7 @@
+ endif
+ if  ($TARGET == fuji-pp32)    set BLAS3=true
+ if  ($TARGET == fuji-pp64)    set BLAS3=true
++if  ($TARGET == xtcos)        set BLAS3=true
+ if  ($TARGET == hpux32)       set BLAS3=true
+ if  ($TARGET == hpux64)       set BLAS3=true
+ if  ($TARGET == ibm32)        set BLAS3=true
+@@ -433,6 +435,7 @@
+ if ($TARGET == mac64)     goto act
+ if ($TARGET == sgi64)     goto act
+ if ($TARGET == sun64)     goto act
++if ($TARGET == xtcos)     goto act
+ #
+ #   Any module with machine dependent code must be activated...
+ #
+@@ -531,6 +534,12 @@
+    if ($MODULE == iolib)  setenv MACHIN '*UNX'
+    if ($MODULE == unport) setenv MACHIN '*DEC'
+ endif
++if ($TARGET == xtcos) then
++                          setenv MACHIN '*I64'
++   if ($MODULE == ddi)    setenv MACHIN '*MPI'
++   if ($MODULE == iolib)  setenv MACHIN '*UNX'
++   if ($MODULE == unport) setenv MACHIN '*L64'
++endif
+ #       the old Cray vector systems would use TCP/IP sockets in DDI
+ if ($TARGET == cray-pvp) then
+                           setenv MACHIN '*I64'
+@@ -762,6 +771,7 @@
+ if (($MODULE == unport) && \
+     (($TARGET == fuji-pp64) || \
+      ($TARGET == hpux64)    || \
++     ($TARGET == xtcos)    || \
+      ($TARGET == ibm64)     || \
+      ($TARGET == ibm64-sp)  || \
+      ($TARGET == ibm-bg)    || \
+@@ -791,6 +801,7 @@
+ #
+ set mathhack=false
+ if ($TARGET == fuji-pp64) set mathhack=true
++if ($TARGET == xtcos) set mathhack=true
+ if ($TARGET == ibm64)     set mathhack=true
+ if ($TARGET == ibm64-sp)  set mathhack=true
+ if ($TARGET == ibm-bg)    set mathhack=true
+@@ -868,6 +879,10 @@
+              -e "s/DTRMM$par/XTRMM$par/g"   -e "s/dtrmm$par/XTRMM$par/g" \
+              -e "s/DTRSM$par/XTRSM$par/g"   -e "s/dtrsm$par/XTRSM$par/g" \
+              -e "s/DSYRK$par/XSYRK$par/g"   -e "s/dsyrk$par/XSYRK$par/g" \
++             -e "s/DGEEV$par/XGEEV$par/g"   -e "s/dgeev$par/XGEEV$par/g" \
++             -e "s/DGESVD$par/XGESVD$par/g" -e "s/dgesvd$par/XGESVD$par/g" \
++             -e "s/ZHEEV$par/XHEEV$par/g"   -e "s/zheev$par/XHEEV$par/g" \
++             -e "s/ZGEMV$par/XZGEMV$par/g"   -e "s/zgemv$par/XZGEMV$par/g" \
+              $MODULE_F > $MODULE.munged
+           mv -f $MODULE.munged $MODULE_F
+       breaksw
+@@ -926,6 +941,7 @@
+      case myrinet:
+      case openmpi:
+      case mpt:
++     case Fujitsu-MPI:
+         set FGEhack=false
+         breaksw
+      case mpich:
+@@ -2693,6 +2709,21 @@
+    endsw
+ #                     ... end of Windows on 32 bit processors.
+ endif
++if ($TARGET == xtcos) then
++   set FORT='mpifrtpx'
++   set OPT = '-O2 -SSL2BLAMP -CcdII8'
++   if ($MODULE == zheev) set OPT='-O0 -Koptmsg=2 -Qt'
++   if ($GMS_OPENMP == true)  then
++      set OPT="$OPT -Kopenmp"
++      if ($MODULE != ompmod) $GMS_BUILD_DIR/tools/addomp.sh $MODULE_F
++      mv $MODULE_F $MODULE_F.tmp
++      sed -e 's/[ \t]*$//' $MODULE_F.tmp > $MODULE_F
++      rm -fr $MODULE_F.tmp
++   endif
++   set echo
++   $FORT -c $OPT $MODULE_F
++   unset echo +endif
++#
+ #
+ #   ------ Windows on 64 bit chips ------
+ #
+diff -ur gamess.org/compall gamess/compall
+--- gamess.org/compall	2018-02-08 06:15:23.000000000 +0900
++++ gamess/compall	2018-03-22 14:18:14.000000000 +0900
+@@ -56,6 +56,7 @@
+ if  ($TARGET == ibm-bg)                           set CCOMP='bgxlc_r'
+ if  ($TARGET == linux32)                          set CCOMP='gcc'
+ if  ($TARGET == linux64)                          set CCOMP='gcc'
++if  ($TARGET == xtcos)                            set CCOMP='mpifccpx'
+ #       it is not true that icc will exist if ifort is in use
+ #---if (($TARGET == linux64) && ($GMS_FORTRAN == ifort)) set CCOMP='icc'
+ if  ($TARGET == necsx)                            set CCOMP='c++'
+@@ -74,6 +75,10 @@
+ if ($TARGET == cray-xc)      set extraflags='-DLINUX64 -m64'
+ if ($TARGET == fuji-pp32)    set extraflags='-DSUN32'
+ if ($TARGET == fuji-pp64)    set extraflags='-DSUN64 -KV9'
++if ($TARGET == xtcos) then
++   set extraflags='-O0 -SSL2BLAMP -DLINUX64 -CcdII8'
++   if ($GMS_OPENMP == true) set extraflags="$extraflags -Kopenmp"
++endif
+ if ($TARGET == hpux32)       goto skip-zunix
+ if ($TARGET == hpux64)       goto skip-zunix
+ if ($TARGET == ibm32)        set extraflags='-DIBM32'
+@@ -239,6 +244,7 @@
+ if ($TARGET == mac64)      ./comp blaswrap
+ if ($TARGET == sgi64)      ./comp blaswrap
+ if ($TARGET == sun64)      ./comp blaswrap
++if ($TARGET == xtcos)      ./comp blaswrap
+ #
+ #  If this is a vector machine, we must compile the vectorized routines
+ #
+diff -ur gamess.org/config gamess/config
+--- gamess.org/config	2018-02-15 12:10:06.000000000 +0900
++++ gamess/config	2018-03-22 14:14:32.000000000 +0900
+@@ -190,6 +190,16 @@
+ #    Depending on the situation, we may set a few other values as well.
+ #
+ switch ($GMS_TARGET)
++#
++# GAMESS on K computer
++# 
++case xtcos:
++
++echo "   Compiling on 'xtcos' on K computer."
++echo  "The FORTRUN compiler is named 'mpifrtpx' for cross compiling."
++set GMS_FORTRAN="mpifrtpx"
++set GMS_MATHLIB='SSL2BLAMP'
++breaksw
+ 
+ case axp64:
+ 
+@@ -398,6 +408,10 @@
+ echo " "
+ 
+ switch ($GMS_FORTRAN)
++   case mpifrtpx:
++      set GMS_FRTPX_OPT="-Kfast -SSL2BLAMP"
++      set GMS_TARGET=xtcos
++      breaksw
+    case gfortran:
+       echo "gfortran is very robust, so this is a wise choice."
+       echo " "
+@@ -1334,6 +1348,11 @@
+    endif
+ #
+    switch ($GMS_FORTRAN)
++      case mpifrtpx:
++         set echo
++           gfortran -o $GMS_BUILD_DIR/tools/actvte.x actvte.f
++         unset echo
++         breaksw
+       case ifort:
+          if (($GMS_TARGET == win32) || ($GMS_TARGET == win64) || ($GMS_TARGET == winazure)) then
+            if (! $?VCINSTALLDIR) then
+@@ -1420,6 +1439,11 @@
+ if ($GMS_TARGET == ibm-sp)   set GMS_DDI_COMM='lapi'
+ if ($GMS_TARGET == sgi64)    set GMS_DDI_COMM='shmem'
+ #
++if ($GMS_TARGET == xtcos)  then
++                             set GMS_DDI_COMM='mpi'
++                             set GMS_MPI_LIB='Fujitsu-MPI'
++endif
++
+ if ($GMS_TARGET == linux64) then
+    echo " "
+    echo -n "please hit <return> to set up your network for Linux clusters."
+diff -ur gamess.org/ddi/compddi gamess/ddi/compddi
+--- gamess.org/ddi/compddi	2018-02-08 06:15:23.000000000 +0900
++++ gamess/ddi/compddi	2018-03-22 14:14:32.000000000 +0900
+@@ -124,6 +124,7 @@
+ if ($TARGET == ibm-bg)   set SYSV=false
+ if ($TARGET == win32)    set SYSV=false
+ if ($TARGET == win64)    set SYSV=false
++if ($TARGET == xtcos)    set SYSV=false
+ 
+ #  4. Incomplete POSIX replacement for System V code
+ #     Always leave SYSV above true, as we continue to use SYSV semaphores!
+@@ -255,6 +256,7 @@
+ #            big machines will find their mpi.f, don't check it.
+      case IBM-BlueGene-MPI:
+      case Cray-XT-MPI:
++     case Fujitsu-MPI:
+         goto skip_mpi_setup
+         breaksw
+      case Cray-XC-MPI:
+@@ -790,6 +792,29 @@
+      set FORT_LIBS = ' '
+   endif
+ 
++# ------------ #
++# K computer
++# ------------ #
++if ($TARGET == xtcos)   set GMS_MPI_LIB=Fujitsu-MPI
++
++  if($TARGET == xtcos) then
++     set UNAME = `uname`
++     set CC = 'mpifccpx'
++     set NumUS=1
++
++     set CFLAGS = "-O0 -SSL2BLAMP -DWINTEL -DDDI_BUFFER_SIZE=786432"
++     if ($GMS_OPENMP == true) set CFLAGS="$CFLAGS -Kopenmp"
++     set CLIBS = ''
++     set F77_OPTS = "-DINT_SIZE=long -D_UNDERSCORES=$NumUS"
++     set AR_FLAGS     = 'cr'
++     set RANLIB_FLAGS = ' '
++
++     set FORTRAN    = 'mpifrtpx'
++     set FORT_FLAGS = '-O0 -SSL2BLAMP -CcdII8'
++     if ($GMS_OPENMP == true) set FORT_FLAGS="$FORT_FLAGS -Kopenmp"
++     set FORT_LIBS  = ''
++   endif
++
+ 
+ # ----------------------- #
+ # NEC SX vector processor #
+@@ -1127,6 +1152,7 @@
+            breaksw
+         case Cray-XT-MPI:
+         case Cray-XC-MPI:
++        case Fujitsu-MPI:
+         case IBM-BlueGene-MPI:
+            breaksw
+         default:
+diff -ur gamess.org/ddi/src/ddi_fortran.c gamess/ddi/src/ddi_fortran.c
+--- gamess.org/ddi/src/ddi_fortran.c	2018-02-08 06:15:23.000000000 +0900
++++ gamess/ddi/src/ddi_fortran.c	2018-03-22 14:16:08.000000000 +0900
+@@ -375,11 +375,13 @@
+       fprintf(stdout,"%s: DDI_Scatter_Acc for WINTEL not implemented.\n",DDI_Id());
+       Fatal_error(911);
+     # endif
++      /*
+       Scattered.oper   = DDI_ACC;
+       Scattered.handle = (int) *handle;
+       Scattered.nelem = (int) *nelem;
+       Scattered.alpha = alpha;
+       DDI_Scatter_AccS(Scattered.handle,&Scattered,alpha,ibuff,buff);
++      */
+    }
+ 
+ /* --------------------------- *\
+diff -ur gamess.org/lked gamess/lked
+--- gamess.org/lked	2018-02-08 06:15:24.000000000 +0900
++++ gamess/lked	2018-03-22 14:14:32.000000000 +0900
+@@ -109,6 +109,19 @@
+ # for all systems use GAMESS LAPACK (by default)
+    set LAPACK='dgeev.o dgesvd.o zheev.o'
+ 
++#   K computer
++#
++if ($TARGET == xtcos) then
++   set LDR='mpifrtpx'
++   set LDOPTS='-O0 -SSL2BLAMP -CcdII8'
++   if ($GMS_OPENMP == true) set LDOPTS="$LDOPTS -Kopenmp"
++   set LIBRARIES=' '
++   set BLAS='blaswrap.o'
++   set LAPACK=' '
++   set VECTOR=' '
++   set QUICHE='zunix.o'
++endif
++
+ #   Digital/Compaq/HP 64 bit "alpha workstation"
+ #   Use the Digital/Compaq eXtended Math Library for BLAS if installed.
+ #
+@@ -1211,6 +1224,11 @@
+    case winazure:
+       set MSG_LIBRARIES=serial.o
+       breaksw
++   case xtcos:
++       set MPILIBS=""
++       set GMS_MPI_PATH=""
++       set MSG_LIBRARIES="$GMS_BUILD_DIR/ddi/libddi.a $MPILIBS -SSL2BLAMP"
++       breaksw
+ #               to get here must be a target typo.
+    default:
+       echo The lked script does not select a correct TARGET machine type.
+diff -ur gamess.org/misc/blaswrap.src gamess/misc/blaswrap.src
+--- gamess.org/misc/blaswrap.src	2018-02-08 06:15:24.000000000 +0900
++++ gamess/misc/blaswrap.src	2018-03-22 14:15:16.000000000 +0900
+@@ -243,3 +243,72 @@
+       CALL DSYRK(UPLO, TRANS, N32, K32, ALPHA, A, LDA32, BETA, C, LDC32)
+       RETURN
+       END
++      SUBROUTINE XGEEV( JOBVL, JOBVR, N, A, LDA, WR, WI, VL, LDVL, VR,
++     $                  LDVR, WORK, LWORK, INFO )
++      CHARACTER          JOBVL, JOBVR
++      INTEGER            INFO, LDA, LDVL, LDVR, LWORK, N
++      DOUBLE PRECISION   A( LDA, * ), VL( LDVL, * ), VR( LDVR, * ),
++     $                   WI( * ), WORK( * ), WR( * )
++      INTEGER*4          INFO32, LDA32, LDVL32, LDVR32, LWORK32, N32
++      LDA32    = LDA
++      LDVL32   = LDVL
++      LDVR32   = LDVR
++      LWORK32  = LWORK
++      N32      = N
++      CALL  DGEEV( JOBVL, JOBVR, N32, A, LDA32, WR, WI, VL, LDVL32, VR,
++     $                  LDVR32, WORK, LWORK32, INFO32 )
++      INFO = INFO32
++      RETURN
++      END
++C
++      SUBROUTINE XGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT,
++     $                   WORK, LWORK, INFO )
++      CHARACTER          JOBU, JOBVT
++      INTEGER            INFO, LDA, LDU, LDVT, LWORK, M, N
++      DOUBLE PRECISION   A( LDA, * ), S( * ), U( LDU, * ),
++     $                   VT( LDVT, * ), WORK( * )
++      INTEGER*4          INFO32, LDA32, LDU32, LDVT32, LWORK32, M32, N32
++      LDA32   =  LDA
++      LDU32   =  LDU
++      LDVT32  =  LDVT
++      LWORK32 =  LWORK
++      M32     =  M
++      N32     =  N
++      CALL DGESVD( JOBU, JOBVT, M32, N32, A, LDA32, S, U, LDU32, VT,
++     $             LDVT32, WORK, LWORK32, INFO32 )
++      INFO = INFO32
++      RETURN
++      END
++C
++      SUBROUTINE XHEEV( JOBZ, UPLO, N, A, LDA, W, WORK, LWORK, RWORK,
++     $                  INFO )
++      CHARACTER          JOBZ, UPLO
++      INTEGER            INFO, LDA, LWORK, N
++      DOUBLE PRECISION   RWORK( * ), W( * )
++      COMPLEX*16         A( LDA, * ), WORK( * )
++      INTEGER*4          INFO32, LDA32, LWORK32, N32
++      LDA32   = LDA
++      LWORK32 = LWORK
++      N32     = N
++      CALL ZHEEV( JOBZ, UPLO, N32, A, LDA32, W, WORK, LWORK32, RWORK,
++     $                  INFO32 )
++      INFO = INFO32
++      RETURN
++      END
++C
++      SUBROUTINE XZGEMV ( TRANS, M, N, ALPHA, A, LDA, X, INCX,
++     $                   BETA, Y, INCY )
++      COMPLEX*16         ALPHA, BETA
++      INTEGER            INCX, INCY, LDA, M, N
++      CHARACTER*1        TRANS
++      COMPLEX*16         A( LDA, * ), X( * ), Y( * )
++      INTEGER*4          INCX32, INCY32, LDA32, M32, N32
++      INCX32 = INCX
++      INCY32 = INCY
++      LDA32  = LDA
++      M32    = M
++      N32    = N
++      CALL ZGEMV ( TRANS, M32, N32, ALPHA, A, LDA32, X, INCX32,
++     $                   BETA, Y, INCY32 )
++      RETURN
++      END
+diff -ur gamess.org/rungms gamess/rungms
+--- gamess.org/rungms	2018-02-08 06:15:24.000000000 +0900
++++ gamess/rungms	2018-03-22 14:14:32.000000000 +0900
+@@ -1,4 +1,4 @@
+-#!/bin/csh
++#!/opt/klocal/bin/tcsh
+ #
+ #  last update = 17 Aug 2016
+ #
+@@ -60,10 +60,12 @@
+ #       both Sun Grid Engine (SGE), and Portable Batch System (PBS).
+ #       See also a very old LoadLeveler "ll-gms" for some IBM systems.
+ #
+-set TARGET=sockets
+-set SCR=/scr/$USER
+-set USERSCR=/u1/$USER/scr
+-set GMSPATH=/u1/mike/gamess
++setenv LANG C
++set TARGET=mpi
++set SCR=.
++set USERSCR=.
++set GMSPATH=%%PUBCHEMQCTOPDIR%%/pkg/gamess
++set NNODES=1
+ #
+ set JOB=$1      # name of the input file xxx.inp, give only the xxx part
+ set VERNO=$2    # revision number of the executable created by 'lked' step
+@@ -76,7 +78,7 @@
+ #  ---- the top third of the script is input and other file assignments ----
+ #
+ echo "----- GAMESS execution script 'rungms' -----"
+-set master=`hostname`
++set master=localhost
+ echo This job is running on host $master
+ echo under operating system `uname` at `date`
+ #
+@@ -344,7 +346,18 @@
+ #       2. Sequential execution is sure to be on this very same host
+    if ($NCPUS == 1) then
+       set NNODES=1
+-      set HOSTLIST=(`hostname`)
++      set HOSTLIST=localhost
++   endif
++   if ($NCPUS >= 1) then
++      set NNODES=$NCPUS
++      set HOST=localhost
++      set HOSTLIST=$HOST
++      @ CPU=1
++      while ($CPU < $NNODES)
++         set HOSTLIST=($HOSTLIST $HOST)
++         @ CPU++
++      end
++      unset $CPU
+    endif
+ #
+ #       3. This is an example of how to run on a multi-core SMP enclosure,
+@@ -532,6 +545,7 @@
+ #         sliced-and-diced into the format required by your MPI kickoff.
+ #
+ if ($TARGET == mpi) then
++/usr/bin/time -a -o ${JOB}.out mpiexec -std ${JOB}.out -n $NCPUS $GMSPATH/gamess.$VERNO.x $JOB < /dev/null
+    #
+    #      Besides the usual three arguments to 'rungms' (see top),
+    #      we'll pass in a "processers per node" value, that is,
+
+
+diff -ur gamess_orig/compall gamess/compall
+--- gamess_orig/compall	2018-02-08 06:15:23.000000000 +0900
++++ gamess/compall	2018-04-09 14:17:02.000000000 +0900
+@@ -272,6 +272,7 @@
+ # compile the subset of files, where modules are defined,
+ # which are used in other files.
+ #
++cat << EOF > __comp
+ ./comp params
+ ./comp mpcdatpm6
+ ./comp mpchbond
+@@ -584,6 +585,8 @@
+ ./comp zapddi
+ ./comp zheev
+ ./comp zmatrx
++EOF
++cat __comp | awk '{print $2}' | parallel -j%%PARALLEL%% -a - 'csh ./comp {}'
+ #
+ #                 four plug-in codes are available:
+ #      TINKER  is available from the GAMESS web site    (see INTRO.DOC),
+

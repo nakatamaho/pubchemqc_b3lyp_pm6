@@ -1,0 +1,205 @@
+--- gamess/comp	2015-01-15 23:49:05.000000000 +0900
++++ gamess/comp	2016-06-06 12:33:44.993083676 +0900
+@@ -1716,7 +1716,7 @@
+ #
+ #  there are four supported 64 bit compilers: gfortran, ifort, pgf77, pathf90
+ #
+-   switch ($GMS_FORTRAN)
++   switch (a$GMS_FORTRAN)
+ 
+    case gfortran:
+ #
+@@ -1718,7 +1718,7 @@
+ #
+    switch (a$GMS_FORTRAN)
+ 
+-   case gfortran:
++   case agfortran:
+ #
+ #        gfortran was included with Fedora Core distributions around FC4.
+ #        This compiler is found for linux32/linux64/mac32/mac64, which
+@@ -1809,7 +1809,7 @@
+ 
+ 
+       set echo
+-      gfortran -c -fdefault-integer-8 $OPT $EXTRAOPT $MODULE_F
++      %%FORTRAN%% -c -fdefault-integer-8 $OPT $EXTRAOPT $MODULE_F
+       unset echo
+       breaksw
+ 
+@@ -1813,7 +1813,7 @@
+       unset echo
+       breaksw
+ 
+-   case ifort:
++   case aifort:
+ #     -i4/-i8 set default integer length
+ #     -On can have n=1,2,3.  Use of 3 caused problems with earlier
+ #          compilers, so it isn't being used here.  Try it if you like.
+@@ -1829,7 +1829,7 @@
+ #     -WB means warn but don't fail on out-of-bounds array references
+ #     -ftz flushes underflow results to zero
+ #
+-      set OPT = '-O2'
++      set OPT = '-xHOST -O2'
+       if (".$GMS_DEBUG_FLAGS" != .) set OPT="$GMS_DEBUG_FLAGS"
+ #       alas, I'm so tired of hearing about so many versions failing to
+ #       diagonalize, that this time critical code is run w/o optimization.
+@@ -1848,6 +1848,7 @@
+       if (($MODULE == rohfcc) && ($GMS_IFORT_VERNO >= 12)) \
+                               set OPT='-O0' # exam42+exam47 (op.sh.CC,IP-EOM)
+       if  ($MODULE == tdxitr) set OPT='-O1' # 10.0, exam39
++      if  ($MODULE == tddint) set OPT='-O1' # compiler internal error by parallel_studio_xe_2016_update3
+       if  ($MODULE == vscf)   set OPT='-O0' # intensities for combinations
+       if  ($MODULE == zheev)  set OPT='-O0' # defensive compiling
+
+--- gamess/rungms	2014-12-11 01:01:06.000000000 +0900
++++ gamess/rungms	2016-06-06 12:33:44.993083676 +0900
+@@ -59,10 +59,11 @@
+ #       both Sun Grid Engine (SGE), and Portable Batch System (PBS).
+ #       See also a very old LoadLeveler "ll-gms" for some IBM systems.
+ #
++setenv LANG 
+ set TARGET=sockets
+-set SCR=/scr/$USER
+-set USERSCR=/u1/$USER/scr
+-set GMSPATH=/u1/mike/gamess
++set SCR=.
++set USERSCR=.
++set GMSPATH=/home/maho/freeenergy/gamess
+ #
+ set JOB=$1      # name of the input file xxx.inp, give only the xxx part
+ set VERNO=$2    # revision number of the executable created by 'lked' step
+@@ -75,7 +76,7 @@
+ #  ---- the top third of the script is input and other file assignments ----
+ #
+ echo "----- GAMESS execution script 'rungms' -----"
+-set master=`hostname`
++set master=localhost
+ echo This job is running on host $master
+ echo under operating system `uname` at `date`
+ #
+@@ -319,7 +320,18 @@
+ #       1. Sequential execution is sure to be on this very same host
+    if ($NCPUS == 1) then
+       set NNODES=1
+-      set HOSTLIST=(`hostname`)
++      set HOSTLIST=localhost
++   endif
++   if ($NCPUS >= 1) then
++      set NNODES=$NCPUS
++      set HOST=localhost
++      set HOSTLIST=$HOST
++      @ CPU=1
++      while ($CPU < $NNODES)
++         set HOSTLIST=($HOSTLIST $HOST)
++         @ CPU++
++      end
++      unset $CPU
+    endif
+ #
+ #       2. This is an example of how to run on a multi-core SMP enclosure,
+@@ -360,8 +372,7 @@
+             set HOSTLIST=(`hostname`:cpus=$NCPUS)
+             breaksw
+          default:
+-            echo I do not know how to run this node in parallel.
+-            exit 20
++            breaksw
+       endsw
+    endif
+ #
+
+
+--- gamess/ddi/compddi.orig	2015-01-15 23:49:05.000000000 +0900
++++ gamess/ddi/compddi	2016-08-10 16:50:30.455785143 +0900
+@@ -668,8 +668,8 @@
+      set CFLAGS = "-DLINUX $ARCH -O3 -fstrict-aliasing -I./"
+      set CLIBS  = "-lpthread"
+ 
+-     switch ($FORTRAN)
+-        case gfortran:
++     switch (a$FORTRAN)
++        case agfortran:
+            set CFLAGS = "$CFLAGS -Dgetarg_=_gfortran_getarg_i4"
+            set CFLAGS = "$CFLAGS -Diargc_=_gfortran_iargc"
+            set NumUS=1
+@@ -681,7 +681,7 @@
+            set CFLAGS = "$CFLAGS -mcmodel=medium"
+            set FORT_FLAGS = "-O2 $ARCH -i8 -i8storage -mcmodel=medium"
+            breaksw
+-        case ifort:
++        case aifort:
+            set NumUS=1
+            set FORT_FLAGS = "-O2 -i8"
+            breaksw
+
+--- gamess/lked	2016-08-10 16:51:49.840344293 +0900
++++ gamess/lked	2016-08-10 17:24:18.655256390 +0900
+@@ -456,13 +456,13 @@
+ #
+ #  settings which depend on the FORTRAN:
+ #
+-   switch ($GMS_FORTRAN)
+-      case gfortran:
++   switch (a$GMS_FORTRAN)
++      case agfortran:
+          set LDR='gfortran'
+          set LDOPTS=' '
+          set FORTLIBS=' '
+          breaksw
+-      case ifort:
++      case aifort:
+          set LDR='ifort'
+          set LDOPTS='-i8'  # -Wl,-M generates a load map
+ #            this auxiliary library seems to have disappeared in ifort 10
+--- gamess/lked~	2016-09-19 10:58:40.735798720 +0900
++++ gamess/lked	2016-09-19 11:19:44.579795568 +0900
+@@ -435,6 +435,12 @@
+       set BLAS=' '
+       breaksw
+ 
++   case openblas
++      #     do a static link so that only compile node needs to install ACML
++      set MATHLIBS="$GMS_MATHLIB_PATH/libopenblas.a"
++      set BLAS=' '
++      breaksw
++
+    case none:
+    default:
+       echo "Warning.  No math library was found, you should install one."
+--- gamess/ddi/compddi~	2016-09-20 21:22:40.030698776 +0900
++++ gamess/ddi/compddi	2016-09-20 21:24:49.164183817 +0900
+@@ -661,7 +661,7 @@
+ #
+ #        Itan2 does not allow -m32/-m64 flags, it's all 64 bit pointers.
+ #
+-                             set ARCH='-m64'
++                             set ARCH='-march=armv8-a'
+      if (`uname -p` == ia64) set ARCH=''
+ 
+      set CC = 'gcc'
+--- gamess/compall~	2015-01-15 23:49:05.000000000 +0900
++++ gamess/compall	2016-09-20 21:28:30.510161036 +0900
+@@ -90,8 +90,7 @@
+ #      Gentoo uses the -m flag, since its -p gives an unusable multiword reply
+ if ($TARGET == linux64) then
+    set chip=(`uname -p`)
+-   if (${#chip} > 1) set chip=unknown
+-   if ($chip == unknown) set chip=`uname -m`
++   if ($chip == unknown) set extraflags='-DLINUX64 -march=armv8-a'
+    if ($chip == x86_64) set extraflags='-DLINUX64 -m64'
+    if ($chip == ia64)   set extraflags='-DLINUX64'
+    if ($chip == ppc64)  set extraflags='-DLINUX64 -mpowerpc64'
+
+--- gamess/comp~	2016-09-20 21:34:41.810202306 +0900
++++ gamess/comp	2016-09-20 21:35:41.201810002 +0900
+@@ -1743,7 +1743,7 @@
+       set OPT='-O2'
+       if ($MODULE == zheev)  set OPT='-O0'  # defensive compiling
+ 
+-      set EXTRAOPT=" "
++      set EXTRAOPT="-march=armv8-a"
+       if ($MODULE_F:e == f90) then
+          set EXTRAOPT="$EXTRAOPT -ffree-line-length-none"
+       else

@@ -1,0 +1,6 @@
++ NUMDIFFVERSION=5.9.0
++ NAME=NUMDIFF-5.9.0
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_NUMDIFF-5.9.0_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

@@ -1,0 +1,6 @@
++ PARALLELVERSION=20160822
++ NAME=PARALLEL-20160822
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_PARALLEL-20160822_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

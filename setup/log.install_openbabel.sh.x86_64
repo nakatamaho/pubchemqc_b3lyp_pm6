@@ -1,0 +1,8 @@
++ CMAKEVERSION=2.8.12.1
++ OPENBABELVERSION=2.4.1
++ EIGENVERSION=6b38706d90a9
++ NAME=OPENBABEL-2.4.1
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_OPENBABEL-2.4.1_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

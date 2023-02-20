@@ -1,0 +1,6 @@
++ TARVERSION=1.29
++ NAME=TAR-1.29
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_TAR-1.29_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

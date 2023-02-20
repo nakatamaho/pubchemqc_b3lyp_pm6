@@ -1,0 +1,48 @@
+
+--- cclib/parser/data.py	2018-05-17 23:36:55.000000000 +0900
++++ cclib/parser/data.py	2018-06-02 21:07:27.000000000 +0900
+@@ -24,7 +24,6 @@
+     Description of cclib attributes:
+         aonames -- atomic orbital names (list of strings)
+         aooverlaps -- atomic orbital overlap matrix (array[2])
+-        atombasis -- indices of atomic orbitals on each atom (list of lists)
+         atomcharges -- atomic partial charges (dict of arrays[1])
+         atomcoords -- atom coordinates (array[3], angstroms)
+         atommasses -- atom masses (array[1], daltons)
+@@ -55,7 +54,6 @@
+         mocoeffs -- molecular orbital coefficients (list of arrays[2])
+         moenergies -- molecular orbital energies (list of arrays[1], eV)
+         moments -- molecular multipole moments (list of arrays[], a.u.)
+-        mosyms -- orbital symmetries (list of lists)
+         mpenergies -- molecular electronic energies with Møller-Plesset corrections (array[2], eV)
+         mult -- multiplicity of the system (integer)
+         natom -- number of atoms (integer)
+@@ -94,9 +92,7 @@
+     # The jsonKey is the key name used for attributes in the CJSON/JSON format
+     # 'TBD' - To Be Decided are the key names of attributes which haven't been included in the cjson format
+     _attributes = {
+-       "aonames":          Attribute(list,             'names',                       'atoms:orbitals'),
+        "aooverlaps":       Attribute(numpy.ndarray,    'overlaps',                    'properties:orbitals'),
+-       "atombasis":        Attribute(list,             'indices',                     'atoms:orbitals'),
+        "atomcharges":      Attribute(dict,             'partial charges',             'properties'),
+        "atomcoords":       Attribute(numpy.ndarray,    'coords',                      'atoms:coords:3d'),
+        "atommasses":       Attribute(numpy.ndarray,    'mass',                        'atoms'),
+@@ -117,17 +113,14 @@
+        "fooverlaps":       Attribute(numpy.ndarray,    'orbital overlap',             'fragments'),
+        "fragnames":        Attribute(list,             'fragment names',              'fragments'),
+        "frags":            Attribute(list,             'atom indices',                'fragments'),
+-       "gbasis":           Attribute(list,             'basis functions',             'atoms:orbitals'),
+        "geotargets":       Attribute(numpy.ndarray,    'geometric targets',           'optimization'),
+        "geovalues":        Attribute(numpy.ndarray,    'geometric values',            'optimization'),
+        "grads":            Attribute(numpy.ndarray,    'TBD',                         'N/A'),
+        "hessian":          Attribute(numpy.ndarray,    'hessian matrix',              'vibrations'),
+        "homos":            Attribute(numpy.ndarray,    'homos',                       'properties:orbitals'),
+        "metadata":         Attribute(dict,             'TBD',                         'N/A'),
+-       "mocoeffs":         Attribute(list,             'coeffs',                      'properties:orbitals'),
+        "moenergies":       Attribute(list,             'energies',                    'properties:orbitals'),
+        "moments":          Attribute(list,             'total dipole moment',         'properties'),
+-       "mosyms":           Attribute(list,             'molecular orbital symmetry',  'properties:orbitals'),
+        "mpenergies":       Attribute(numpy.ndarray,    'moller plesset',              'properties:energy'),
+        "mult":             Attribute(int,              'multiplicity',                'properties'),
+        "natom":            Attribute(int,              'number of atoms',             'properties'),
+Only in work_cclib/cclib-1.5.3.post1/cclib/parser: data.py~

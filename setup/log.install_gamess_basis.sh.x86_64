@@ -1,0 +1,6 @@
++ GAMESS_BASISVERSION=1.0
++ NAME=GAMESS_BASIS-1.0
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_GAMESS_BASIS-1.0_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

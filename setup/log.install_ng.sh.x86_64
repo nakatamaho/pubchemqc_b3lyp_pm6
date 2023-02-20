@@ -1,0 +1,6 @@
++ NGVERSION=1.5beta1
++ NAME=NG-1.5beta1
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_NG-1.5beta1_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

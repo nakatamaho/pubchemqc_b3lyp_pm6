@@ -1,0 +1,6 @@
++ XZVERSION=5.2.2
++ NAME=XZ-5.2.2
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_XZ-5.2.2_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

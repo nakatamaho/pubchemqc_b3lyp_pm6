@@ -1,0 +1,14 @@
+GITVER=85636ff
+VERSION=v0.2.19-0
+_BLAS=xianyi-OpenBLAS
+export FC=gfortran-4.8
+
+WRKDIR=$PUBCHEMQCSETUPDIR/work_openblas
+rm -rf $WRKDIR
+mkdir $WRKDIR
+
+cd $WRKDIR
+tar xvfz $PUBCHEMQCARCHIVESDIR/${_BLAS}-${VERSION}-g${GITVER}.tar.gz
+cd ${_BLAS}-${GITVER}
+make NO_SHARED=1
+make NO_SHARED=1 PREFIX=$PUBCHEMQCPKGDIR install

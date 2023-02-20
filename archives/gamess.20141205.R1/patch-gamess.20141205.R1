@@ -1,0 +1,179 @@
+diff -ur gamess_orig/comp gamess/comp
+--- gamess_orig/comp	2015-01-15 23:49:05.000000000 +0900
++++ gamess/comp	2018-04-09 10:07:56.000000000 +0900
+@@ -1716,9 +1716,9 @@
+ #
+ #  there are four supported 64 bit compilers: gfortran, ifort, pgf77, pathf90
+ #
+-   switch ($GMS_FORTRAN)
++   switch (a$GMS_FORTRAN)
+ 
+-   case gfortran:
++   case agfortran:
+ #
+ #        gfortran was included with Fedora Core distributions around FC4.
+ #        This compiler is found for linux32/linux64/mac32/mac64, which
+@@ -1809,11 +1809,11 @@
+ 
+ 
+       set echo
+-      gfortran -c -fdefault-integer-8 $OPT $EXTRAOPT $MODULE_F
++      ifort -c -fdefault-integer-8 $OPT $EXTRAOPT $MODULE_F
+       unset echo
+       breaksw
+ 
+-   case ifort:
++   case aifort:
+ #     -i4/-i8 set default integer length
+ #     -On can have n=1,2,3.  Use of 3 caused problems with earlier
+ #          compilers, so it isn't being used here.  Try it if you like.
+@@ -1829,7 +1829,7 @@
+ #     -WB means warn but don't fail on out-of-bounds array references
+ #     -ftz flushes underflow results to zero
+ #
+-      set OPT = '-O2'
++      set OPT = '-xHOST -O2'
+       if (".$GMS_DEBUG_FLAGS" != .) set OPT="$GMS_DEBUG_FLAGS"
+ #       alas, I'm so tired of hearing about so many versions failing to
+ #       diagonalize, that this time critical code is run w/o optimization.
+@@ -1848,6 +1848,7 @@
+       if (($MODULE == rohfcc) && ($GMS_IFORT_VERNO >= 12)) \
+                               set OPT='-O0' # exam42+exam47 (op.sh.CC,IP-EOM)
+       if  ($MODULE == tdxitr) set OPT='-O1' # 10.0, exam39
++      if  ($MODULE == tddint) set OPT='-O1' # compiler internal error by parallel_studio_xe_2016_update3
+       if  ($MODULE == vscf)   set OPT='-O0' # intensities for combinations
+       if  ($MODULE == zheev)  set OPT='-O0' # defensive compiling
+ 
+diff -ur gamess_orig/compall gamess/compall
+--- gamess_orig/compall	2015-01-15 23:49:05.000000000 +0900
++++ gamess/compall	2018-04-09 10:09:06.000000000 +0900
+@@ -244,6 +244,7 @@
+ # compile the subset of files, where modules are defined,
+ # which are used in other files. 
+ #
++cat << EOF > __comp
+ ./comp mpcdatpm6
+ ./comp mpchbond
+ ./comp rmddat
+@@ -530,6 +531,8 @@
+ ./comp zapddi
+ ./comp zheev
+ ./comp zmatrx
++EOF
++cat __comp | awk '{print $2}' | parallel -j%%PARALLEL%% -a - 'csh ./comp {}'
+ #
+ #                 four plug-in codes are available:
+ #      TINKER  is available from the GAMESS web site    (see INTRO.DOC),
+diff -ur gamess_orig/ddi/compddi gamess/ddi/compddi
+--- gamess_orig/ddi/compddi	2015-01-15 23:49:05.000000000 +0900
++++ gamess/ddi/compddi	2018-04-09 10:07:55.000000000 +0900
+@@ -668,8 +668,8 @@
+      set CFLAGS = "-DLINUX $ARCH -O3 -fstrict-aliasing -I./"
+      set CLIBS  = "-lpthread"
+ 
+-     switch ($FORTRAN)
+-        case gfortran:
++     switch (a$FORTRAN)
++        case agfortran:
+            set CFLAGS = "$CFLAGS -Dgetarg_=_gfortran_getarg_i4"
+            set CFLAGS = "$CFLAGS -Diargc_=_gfortran_iargc"
+            set NumUS=1
+@@ -681,7 +681,7 @@
+            set CFLAGS = "$CFLAGS -mcmodel=medium"
+            set FORT_FLAGS = "-O2 $ARCH -i8 -i8storage -mcmodel=medium"
+            breaksw
+-        case ifort:
++        case aifort:
+            set NumUS=1
+            set FORT_FLAGS = "-O2 -i8"
+            breaksw
+diff -ur gamess_orig/lked gamess/lked
+--- gamess_orig/lked	2014-12-09 02:56:59.000000000 +0900
++++ gamess/lked	2018-04-09 10:07:56.000000000 +0900
+@@ -435,6 +435,12 @@
+       set BLAS=' '
+       breaksw
+ 
++   case openblas
++      #     do a static link so that only compile node needs to install ACML
++      set MATHLIBS="$GMS_MATHLIB_PATH/libopenblas.a"
++      set BLAS=' '
++      breaksw
++
+    case none:
+    default:
+       echo "Warning.  No math library was found, you should install one."
+@@ -456,13 +462,13 @@
+ #
+ #  settings which depend on the FORTRAN:
+ #
+-   switch ($GMS_FORTRAN)
+-      case gfortran:
++   switch (a$GMS_FORTRAN)
++      case agfortran:
+          set LDR='gfortran'
+          set LDOPTS=' '
+          set FORTLIBS=' '
+          breaksw
+-      case ifort:
++      case aifort:
+          set LDR='ifort'
+          set LDOPTS='-i8'  # -Wl,-M generates a load map
+ #            this auxiliary library seems to have disappeared in ifort 10
+diff -ur gamess_orig/rungms gamess/rungms
+--- gamess_orig/rungms	2014-12-11 01:01:06.000000000 +0900
++++ gamess/rungms	2018-04-09 10:07:55.000000000 +0900
+@@ -59,10 +59,11 @@
+ #       both Sun Grid Engine (SGE), and Portable Batch System (PBS).
+ #       See also a very old LoadLeveler "ll-gms" for some IBM systems.
+ #
++setenv LANG 
+ set TARGET=sockets
+-set SCR=/scr/$USER
+-set USERSCR=/u1/$USER/scr
+-set GMSPATH=/u1/mike/gamess
++set SCR=.
++set USERSCR=.
++set GMSPATH=/home/maho/freeenergy/gamess
+ #
+ set JOB=$1      # name of the input file xxx.inp, give only the xxx part
+ set VERNO=$2    # revision number of the executable created by 'lked' step
+@@ -75,7 +76,7 @@
+ #  ---- the top third of the script is input and other file assignments ----
+ #
+ echo "----- GAMESS execution script 'rungms' -----"
+-set master=`hostname`
++set master=localhost
+ echo This job is running on host $master
+ echo under operating system `uname` at `date`
+ #
+@@ -319,7 +320,18 @@
+ #       1. Sequential execution is sure to be on this very same host
+    if ($NCPUS == 1) then
+       set NNODES=1
+-      set HOSTLIST=(`hostname`)
++      set HOSTLIST=localhost
++   endif
++   if ($NCPUS >= 1) then
++      set NNODES=$NCPUS
++      set HOST=localhost
++      set HOSTLIST=$HOST
++      @ CPU=1
++      while ($CPU < $NNODES)
++         set HOSTLIST=($HOSTLIST $HOST)
++         @ CPU++
++      end
++      unset $CPU
+    endif
+ #
+ #       2. This is an example of how to run on a multi-core SMP enclosure,
+@@ -360,8 +372,7 @@
+             set HOSTLIST=(`hostname`:cpus=$NCPUS)
+             breaksw
+          default:
+-            echo I do not know how to run this node in parallel.
+-            exit 20
++            breaksw
+       endsw
+    endif
+ #

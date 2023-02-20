@@ -1,0 +1,298 @@
++ CCLIBVERSION=1.5.3.post1
++ NAME=CCLIB-1.5.3.post1
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_CCLIB-1.5.3.post1_x86_64 ']'
++ WRKDIR=/home/maho/b3lyp_pm6/setup/work_cclib
++ rm -rf /home/maho/b3lyp_pm6/setup/work_cclib
++ mkdir /home/maho/b3lyp_pm6/setup/work_cclib
++ cd /home/maho/b3lyp_pm6/setup/work_cclib
++ tar xvf /home/maho/b3lyp_pm6/archives/cclib-1.5.3.post1.tar.gz
+cclib-1.5.3.post1/
+cclib-1.5.3.post1/setup.py
+cclib-1.5.3.post1/PKG-INFO
+cclib-1.5.3.post1/test/
+cclib-1.5.3.post1/test/testall.py
+cclib-1.5.3.post1/test/test_parser.py
+cclib-1.5.3.post1/test/test_io.py
+cclib-1.5.3.post1/test/test_method.py
+cclib-1.5.3.post1/test/test_bridge.py
+cclib-1.5.3.post1/test/test_utils.py
+cclib-1.5.3.post1/test/test_data.py
+cclib-1.5.3.post1/cclib/
+cclib-1.5.3.post1/cclib/progress/
+cclib-1.5.3.post1/cclib/progress/qt4progress.py
+cclib-1.5.3.post1/cclib/progress/__init__.py
+cclib-1.5.3.post1/cclib/progress/textprogress.py
+cclib-1.5.3.post1/cclib/parser/
+cclib-1.5.3.post1/cclib/parser/adfparser.py
+cclib-1.5.3.post1/cclib/parser/psiparser.py
+cclib-1.5.3.post1/cclib/parser/logfileparser.py
+cclib-1.5.3.post1/cclib/parser/qchemparser.py
+cclib-1.5.3.post1/cclib/parser/gaussianparser.py
+cclib-1.5.3.post1/cclib/parser/molproparser.py
+cclib-1.5.3.post1/cclib/parser/gamessukparser.py
+cclib-1.5.3.post1/cclib/parser/mopacparser.py
+cclib-1.5.3.post1/cclib/parser/jaguarparser.py
+cclib-1.5.3.post1/cclib/parser/orcaparser.py
+cclib-1.5.3.post1/cclib/parser/daltonparser.py
+cclib-1.5.3.post1/cclib/parser/gamessparser.py
+cclib-1.5.3.post1/cclib/parser/utils.py
+cclib-1.5.3.post1/cclib/parser/__init__.py
+cclib-1.5.3.post1/cclib/parser/nwchemparser.py
+cclib-1.5.3.post1/cclib/parser/data.py
+cclib-1.5.3.post1/cclib/cclib.egg-info/
+cclib-1.5.3.post1/cclib/cclib.egg-info/PKG-INFO
+cclib-1.5.3.post1/cclib/cclib.egg-info/top_level.txt
+cclib-1.5.3.post1/cclib/cclib.egg-info/SOURCES.txt
+cclib-1.5.3.post1/cclib/cclib.egg-info/dependency_links.txt
+cclib-1.5.3.post1/cclib/cclib.egg-info/entry_points.txt
+cclib-1.5.3.post1/cclib/io/
+cclib-1.5.3.post1/cclib/io/ccio.py
+cclib-1.5.3.post1/cclib/io/cjsonreader.py
+cclib-1.5.3.post1/cclib/io/filewriter.py
+cclib-1.5.3.post1/cclib/io/wfxwriter.py
+cclib-1.5.3.post1/cclib/io/xyzwriter.py
+cclib-1.5.3.post1/cclib/io/cmlwriter.py
+cclib-1.5.3.post1/cclib/io/cjsonwriter.py
+cclib-1.5.3.post1/cclib/io/moldenwriter.py
+cclib-1.5.3.post1/cclib/io/__init__.py
+cclib-1.5.3.post1/cclib/bridge/
+cclib-1.5.3.post1/cclib/bridge/cclib2pyquante.py
+cclib-1.5.3.post1/cclib/bridge/cclib2openbabel.py
+cclib-1.5.3.post1/cclib/bridge/cclib2biopython.py
+cclib-1.5.3.post1/cclib/bridge/__init__.py
+cclib-1.5.3.post1/cclib/scripts/
+cclib-1.5.3.post1/cclib/scripts/cda.py
+cclib-1.5.3.post1/cclib/scripts/ccwrite.py
+cclib-1.5.3.post1/cclib/scripts/ccget.py
+cclib-1.5.3.post1/cclib/scripts/__init__.py
+cclib-1.5.3.post1/cclib/method/
+cclib-1.5.3.post1/cclib/method/population.py
+cclib-1.5.3.post1/cclib/method/lpa.py
+cclib-1.5.3.post1/cclib/method/opa.py
+cclib-1.5.3.post1/cclib/method/cda.py
+cclib-1.5.3.post1/cclib/method/density.py
+cclib-1.5.3.post1/cclib/method/electrons.py
+cclib-1.5.3.post1/cclib/method/nuclear.py
+cclib-1.5.3.post1/cclib/method/cspa.py
+cclib-1.5.3.post1/cclib/method/mbo.py
+cclib-1.5.3.post1/cclib/method/mpa.py
+cclib-1.5.3.post1/cclib/method/calculationmethod.py
+cclib-1.5.3.post1/cclib/method/volume.py
+cclib-1.5.3.post1/cclib/method/orbitals.py
+cclib-1.5.3.post1/cclib/method/fragments.py
+cclib-1.5.3.post1/cclib/method/__init__.py
+cclib-1.5.3.post1/setup.cfg
++ cd cclib-1.5.3.post1
++ patch -p0
+patching file cclib/parser/data.py
++ python3 setup.py build
+running build
+running build_py
+creating build
+creating build/lib
+creating build/lib/progress
+copying cclib/progress/qt4progress.py -> build/lib/progress
+copying cclib/progress/__init__.py -> build/lib/progress
+copying cclib/progress/textprogress.py -> build/lib/progress
+creating build/lib/parser
+copying cclib/parser/adfparser.py -> build/lib/parser
+copying cclib/parser/psiparser.py -> build/lib/parser
+copying cclib/parser/logfileparser.py -> build/lib/parser
+copying cclib/parser/qchemparser.py -> build/lib/parser
+copying cclib/parser/gaussianparser.py -> build/lib/parser
+copying cclib/parser/molproparser.py -> build/lib/parser
+copying cclib/parser/gamessukparser.py -> build/lib/parser
+copying cclib/parser/mopacparser.py -> build/lib/parser
+copying cclib/parser/jaguarparser.py -> build/lib/parser
+copying cclib/parser/orcaparser.py -> build/lib/parser
+copying cclib/parser/daltonparser.py -> build/lib/parser
+copying cclib/parser/gamessparser.py -> build/lib/parser
+copying cclib/parser/utils.py -> build/lib/parser
+copying cclib/parser/__init__.py -> build/lib/parser
+copying cclib/parser/nwchemparser.py -> build/lib/parser
+copying cclib/parser/data.py -> build/lib/parser
+creating build/lib/io
+copying cclib/io/ccio.py -> build/lib/io
+copying cclib/io/cjsonreader.py -> build/lib/io
+copying cclib/io/filewriter.py -> build/lib/io
+copying cclib/io/wfxwriter.py -> build/lib/io
+copying cclib/io/xyzwriter.py -> build/lib/io
+copying cclib/io/cmlwriter.py -> build/lib/io
+copying cclib/io/cjsonwriter.py -> build/lib/io
+copying cclib/io/moldenwriter.py -> build/lib/io
+copying cclib/io/__init__.py -> build/lib/io
+creating build/lib/bridge
+copying cclib/bridge/cclib2pyquante.py -> build/lib/bridge
+copying cclib/bridge/cclib2openbabel.py -> build/lib/bridge
+copying cclib/bridge/cclib2biopython.py -> build/lib/bridge
+copying cclib/bridge/__init__.py -> build/lib/bridge
+creating build/lib/scripts
+copying cclib/scripts/cda.py -> build/lib/scripts
+copying cclib/scripts/ccwrite.py -> build/lib/scripts
+copying cclib/scripts/ccget.py -> build/lib/scripts
+copying cclib/scripts/__init__.py -> build/lib/scripts
+creating build/lib/method
+copying cclib/method/population.py -> build/lib/method
+copying cclib/method/lpa.py -> build/lib/method
+copying cclib/method/opa.py -> build/lib/method
+copying cclib/method/cda.py -> build/lib/method
+copying cclib/method/density.py -> build/lib/method
+copying cclib/method/electrons.py -> build/lib/method
+copying cclib/method/nuclear.py -> build/lib/method
+copying cclib/method/cspa.py -> build/lib/method
+copying cclib/method/mbo.py -> build/lib/method
+copying cclib/method/mpa.py -> build/lib/method
+copying cclib/method/calculationmethod.py -> build/lib/method
+copying cclib/method/volume.py -> build/lib/method
+copying cclib/method/orbitals.py -> build/lib/method
+copying cclib/method/fragments.py -> build/lib/method
+copying cclib/method/__init__.py -> build/lib/method
++ python3 setup.py install --prefix /home/maho/b3lyp_pm6/pkg/x86_64
+running install
+running bdist_egg
+running egg_info
+writing cclib/cclib.egg-info/PKG-INFO
+writing dependency_links to cclib/cclib.egg-info/dependency_links.txt
+writing entry points to cclib/cclib.egg-info/entry_points.txt
+writing top-level names to cclib/cclib.egg-info/top_level.txt
+reading manifest file 'cclib/cclib.egg-info/SOURCES.txt'
+writing manifest file 'cclib/cclib.egg-info/SOURCES.txt'
+installing library code to build/bdist.linux-x86_64/egg
+running install_lib
+running build_py
+creating build/bdist.linux-x86_64
+creating build/bdist.linux-x86_64/egg
+creating build/bdist.linux-x86_64/egg/progress
+copying build/lib/progress/qt4progress.py -> build/bdist.linux-x86_64/egg/progress
+copying build/lib/progress/__init__.py -> build/bdist.linux-x86_64/egg/progress
+copying build/lib/progress/textprogress.py -> build/bdist.linux-x86_64/egg/progress
+creating build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/adfparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/psiparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/logfileparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/qchemparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/gaussianparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/molproparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/gamessukparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/mopacparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/jaguarparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/orcaparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/daltonparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/gamessparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/utils.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/__init__.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/nwchemparser.py -> build/bdist.linux-x86_64/egg/parser
+copying build/lib/parser/data.py -> build/bdist.linux-x86_64/egg/parser
+creating build/bdist.linux-x86_64/egg/io
+copying build/lib/io/ccio.py -> build/bdist.linux-x86_64/egg/io
+copying build/lib/io/cjsonreader.py -> build/bdist.linux-x86_64/egg/io
+copying build/lib/io/filewriter.py -> build/bdist.linux-x86_64/egg/io
+copying build/lib/io/wfxwriter.py -> build/bdist.linux-x86_64/egg/io
+copying build/lib/io/xyzwriter.py -> build/bdist.linux-x86_64/egg/io
+copying build/lib/io/cmlwriter.py -> build/bdist.linux-x86_64/egg/io
+copying build/lib/io/cjsonwriter.py -> build/bdist.linux-x86_64/egg/io
+copying build/lib/io/moldenwriter.py -> build/bdist.linux-x86_64/egg/io
+copying build/lib/io/__init__.py -> build/bdist.linux-x86_64/egg/io
+creating build/bdist.linux-x86_64/egg/bridge
+copying build/lib/bridge/cclib2pyquante.py -> build/bdist.linux-x86_64/egg/bridge
+copying build/lib/bridge/cclib2openbabel.py -> build/bdist.linux-x86_64/egg/bridge
+copying build/lib/bridge/cclib2biopython.py -> build/bdist.linux-x86_64/egg/bridge
+copying build/lib/bridge/__init__.py -> build/bdist.linux-x86_64/egg/bridge
+creating build/bdist.linux-x86_64/egg/scripts
+copying build/lib/scripts/cda.py -> build/bdist.linux-x86_64/egg/scripts
+copying build/lib/scripts/ccwrite.py -> build/bdist.linux-x86_64/egg/scripts
+copying build/lib/scripts/ccget.py -> build/bdist.linux-x86_64/egg/scripts
+copying build/lib/scripts/__init__.py -> build/bdist.linux-x86_64/egg/scripts
+creating build/bdist.linux-x86_64/egg/method
+copying build/lib/method/population.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/lpa.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/opa.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/cda.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/density.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/electrons.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/nuclear.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/cspa.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/mbo.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/mpa.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/calculationmethod.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/volume.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/orbitals.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/fragments.py -> build/bdist.linux-x86_64/egg/method
+copying build/lib/method/__init__.py -> build/bdist.linux-x86_64/egg/method
+byte-compiling build/bdist.linux-x86_64/egg/progress/qt4progress.py to qt4progress.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/progress/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/progress/textprogress.py to textprogress.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/adfparser.py to adfparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/psiparser.py to psiparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/logfileparser.py to logfileparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/qchemparser.py to qchemparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/gaussianparser.py to gaussianparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/molproparser.py to molproparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/gamessukparser.py to gamessukparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/mopacparser.py to mopacparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/jaguarparser.py to jaguarparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/orcaparser.py to orcaparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/daltonparser.py to daltonparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/gamessparser.py to gamessparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/utils.py to utils.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/nwchemparser.py to nwchemparser.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/parser/data.py to data.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/ccio.py to ccio.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/cjsonreader.py to cjsonreader.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/filewriter.py to filewriter.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/wfxwriter.py to wfxwriter.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/xyzwriter.py to xyzwriter.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/cmlwriter.py to cmlwriter.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/cjsonwriter.py to cjsonwriter.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/moldenwriter.py to moldenwriter.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/io/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/bridge/cclib2pyquante.py to cclib2pyquante.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/bridge/cclib2openbabel.py to cclib2openbabel.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/bridge/cclib2biopython.py to cclib2biopython.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/bridge/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/scripts/cda.py to cda.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/scripts/ccwrite.py to ccwrite.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/scripts/ccget.py to ccget.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/scripts/__init__.py to __init__.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/population.py to population.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/lpa.py to lpa.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/opa.py to opa.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/cda.py to cda.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/density.py to density.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/electrons.py to electrons.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/nuclear.py to nuclear.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/cspa.py to cspa.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/mbo.py to mbo.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/mpa.py to mpa.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/calculationmethod.py to calculationmethod.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/volume.py to volume.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/orbitals.py to orbitals.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/fragments.py to fragments.cpython-36.pyc
+byte-compiling build/bdist.linux-x86_64/egg/method/__init__.py to __init__.cpython-36.pyc
+creating build/bdist.linux-x86_64/egg/EGG-INFO
+copying cclib/cclib.egg-info/PKG-INFO -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying cclib/cclib.egg-info/SOURCES.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying cclib/cclib.egg-info/dependency_links.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying cclib/cclib.egg-info/entry_points.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+copying cclib/cclib.egg-info/top_level.txt -> build/bdist.linux-x86_64/egg/EGG-INFO
+zip_safe flag not set; analyzing archive contents...
+parser.__pycache__.logfileparser.cpython-36: module MAY be using inspect.getouterframes
+creating dist
+creating 'dist/cclib-1.5.3.post1-py3.6.egg' and adding 'build/bdist.linux-x86_64/egg' to it
+removing 'build/bdist.linux-x86_64/egg' (and everything under it)
+Processing cclib-1.5.3.post1-py3.6.egg
+removing '/bwfefs/home/maho/b3lyp_pm6/pkg/x86_64/lib/python3.6/site-packages/cclib-1.5.3.post1-py3.6.egg' (and everything under it)
+creating /bwfefs/home/maho/b3lyp_pm6/pkg/x86_64/lib/python3.6/site-packages/cclib-1.5.3.post1-py3.6.egg
+Extracting cclib-1.5.3.post1-py3.6.egg to /bwfefs/home/maho/b3lyp_pm6/pkg/x86_64/lib/python3.6/site-packages
+cclib 1.5.3.post1 is already the active version in easy-install.pth
+Installing ccget script to /home/maho/b3lyp_pm6/pkg/x86_64/bin
+Installing ccwrite script to /home/maho/b3lyp_pm6/pkg/x86_64/bin
+Installing cda script to /home/maho/b3lyp_pm6/pkg/x86_64/bin
+
+Installed /bwfefs/home/maho/b3lyp_pm6/pkg/x86_64/lib/python3.6/site-packages/cclib-1.5.3.post1-py3.6.egg
+Processing dependencies for cclib==1.5.3.post1
+Finished processing dependencies for cclib==1.5.3.post1
++ mkdir -p /home/maho/b3lyp_pm6/pkg/x86_64/lib/python3.6/site-packages/
++ cp -r cclib /home/maho/b3lyp_pm6/pkg/x86_64/lib/python3.6/site-packages/
++ touch /home/maho/b3lyp_pm6/setup/.done_CCLIB-1.5.3.post1_x86_64

@@ -1,0 +1,6 @@
++ COREUTILSVERSION=8.25
++ NAME=COREUTILS-8.25
++ '[' -e /home/maho/b3lyp_pm6/setup/.done_COREUTILS-8.25_x86_64 ']'
++ echo 'already installed'
+already installed
++ exit

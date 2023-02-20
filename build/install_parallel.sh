@@ -1,0 +1,12 @@
+PARALLELVERSION=20160822
+
+WRKDIR=$PUBCHEMQCSETUPDIR/work_parallel
+rm -rf $WRKDIR
+mkdir $WRKDIR
+
+cd $WRKDIR
+tar xvfj $PUBCHEMQCARCHIVESDIR/parallel-$PARALLELVERSION.tar.bz2
+cd parallel-$PARALLELVERSION
+./configure --prefix=$PUBCHEMQCPKGDIR
+make 
+make install
