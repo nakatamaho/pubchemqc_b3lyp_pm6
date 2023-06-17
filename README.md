@@ -2,6 +2,12 @@
 
 Just for a reference. Not for a production.
 
+# datasets
+Whole datasets are available at
+https://nakatamaho.riken.jp/pubchemqc.riken.jp/b3lyp_pm6_datasets.html
+
+# Issues
+You can submit Issues wrt to this The PubChemQC B3LYP/6-31G*//pm6 dataset as well
 
 # citation
 ```
